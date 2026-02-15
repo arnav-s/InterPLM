@@ -182,7 +182,7 @@ class ESM(BaseEmbedder):
                     # ESM uses: [CLS] seq [EOS] [PAD]...
                     for seq_idx, seq_len in enumerate([len(seq) for seq in batch_sequences]):
                         # Extract only the actual sequence tokens (position 1 to seq_len+1)
-                        seq_embeddings = layer_output[seq_idx, 1:seq_len+1, :].detach().cpu()
+                        seq_embeddings = layer_output[seq_idx, 0:seq_len+1, :].detach().cpu()
                         all_embeddings[layer].append(seq_embeddings)
         
         # Process the collected embeddings

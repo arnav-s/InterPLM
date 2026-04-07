@@ -3,6 +3,7 @@
 from typing import Type
 from interplm.embedders.base import BaseEmbedder
 from interplm.embedders.esm import ESM
+from interplm.embedders.saprot import SaProt
 
 
 def get_embedder(embedder_type: str, **kwargs) -> BaseEmbedder:
@@ -21,6 +22,7 @@ def get_embedder(embedder_type: str, **kwargs) -> BaseEmbedder:
     embedder_types = {
         'esm': ESM,
         'esm2': ESM,  # Alias
+        'saprot': SaProt
     }
     
     embedder_type_lower = embedder_type.lower()
@@ -33,4 +35,4 @@ def get_embedder(embedder_type: str, **kwargs) -> BaseEmbedder:
     return embedder_types[embedder_type_lower](**kwargs)
 
 
-__all__ = ["BaseEmbedder", "ESM", "get_embedder"]
+__all__ = ["BaseEmbedder", "ESM", "get_embedder", "SaProt"]

@@ -26,15 +26,11 @@ class SaProt(BaseEmbedder):
     
     def __init__(
         self, 
-        model_path: str = "SaProt_35M_AF2",
+        model_name: str = "westlake-repl/SaProt_35M_AF2",
         device: Optional[str] = None,
         max_length: int = 1024
     ):
-        import os
-        model_name = os.path.basename(model_path)
         # Resolve model name aliases
-        if not os.path.exists(model_path):
-            os.system("")
         
         if device is None:
             device = get_device()
@@ -158,8 +154,8 @@ class SaProt(BaseEmbedder):
                     # Always remove CLS and EOS tokens for each sequence in batch
                     # ESM uses: [CLS] seq [EOS] [PAD]...
                     for seq_idx, seq_len in enumerate([len(seq) for seq in batch_sequences]):
-                        # Extract only the actual sequence tokens (position 1 to seq_len+1)
-                        seq_embeddings = layer_output[seq_idx, 1:seq_len+1, :].detach().cpu()
+                        # Extract only the actual sequence tokens (position 0 to seq_len)
+                        seq_embeddings = layer_output[seq_idx, 0:seq_len, :].detach().cpu()
                         all_embeddings[layer].append(seq_embeddings)
         
         # Process the collected embeddings
@@ -388,7 +384,7 @@ class SaProt(BaseEmbedder):
             return list(range(self.model.config.num_hidden_layers + 1))
         else:
             # Defaults for known models
-            return list(range(7))  # ESM2-8M has 6 layers + embedding layer
+            return list(range(13))  # SaProt35M has 12 layers + embedding layer
     
     @property
     def max_sequence_length(self) -> int:
